@@ -5,34 +5,33 @@ from empapp.models import Employee
 
 
 def createempview(request):
-    if request.method == "POST":
-        empform = EmployeeForm(request.POST)
-        if empform.is_valid():
+    if request.method == 'POST':
+        empdata = EmployeeForm(request.POST)
+        if empdata.is_valid():
             try:
-                empform.save()
+                empdata.save()
                 return redirect("/read")
             except:
                 pass
-
     else:
         empform = EmployeeForm()
-
     return render(request, 'create.html', {'empform': empform})
 
 
 def displayempview(request):
-    emp_list = Employee.objects.all()
-    return render(request, 'display.html', {'emp_list': emp_list})
+    employees = Employee.objects.all()
+    return render(request, 'display.html', {'employees': employees})
 
 
 def editempview(request, id):
     employee = Employee.objects.get(id=id)
-    return render(request, 'update.html', {'employee': employee})
+    return render(request, 'edit.html', {'employee': employee})
 
 
-def upateempview(request, id):
+def updateempview(request, id):
     employee = Employee.objects.get(id=id)
-    if request.method == 'POST':
+    if request.method == "POST":
+        print("Test Case 123")
         empdata = EmployeeForm(request.POST, instance=employee)
         if empdata.is_valid():
             try:
@@ -41,10 +40,10 @@ def upateempview(request, id):
             except:
                 pass
 
-    return render(request, 'update.html')
+    return render(request, 'edit.html')
 
 
-def deletempview(request, id):
-    empdata = Employee.objects.get(id=id)
-    empdata.delete()
-    return redirect('/read')
+def deleteempview(request, id):
+    emp = Employee.objects.get(id=id)
+    emp.delete()
+    return redirect("/read")
